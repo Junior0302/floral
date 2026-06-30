@@ -10,6 +10,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Clock, Send } from "lucide-re
 import AnimatedTitle from "@/components/AnimatedTitle";
 import Footer from "@/components/Footer";
 import { useStore } from "@/lib/store/cart";
+import { contactImages } from "@/lib/data/site";
 
 const schema = z.object({
   name: z.string().min(2, "Veuillez entrer votre nom"),
@@ -92,17 +93,39 @@ export default function ContactPage() {
       </section>
 
       <section className="px-6 pb-8 md:px-12 lg:px-16">
+        <div className="float-image relative mx-auto mb-16 aspect-[21/9] max-w-5xl overflow-hidden">
+          <Image
+            src={contactImages.banner}
+            alt="Atelier FLORA"
+            fill
+            className="object-cover"
+            sizes="(max-width: 1280px) 100vw, 1024px"
+            priority
+          />
+        </div>
+
         <div ref={contentRef} className="mx-auto max-w-6xl">
           <div className="grid gap-10 lg:grid-cols-5 lg:gap-12">
             {/* Image + infos */}
             <div className="lg:col-span-2">
               <div className="float-image relative aspect-[4/5] overflow-hidden">
                 <Image
-                  src="/flowers/4.png"
-                  alt="Composition florale FLORA"
+                  src={contactImages.hero}
+                  alt="Ambiance florale FLORA"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 40vw"
+                />
+              </div>
+
+              <div className="float-image relative mt-6 aspect-[16/10] overflow-hidden">
+                <Image
+                  src={contactImages.secondary}
+                  alt="Compositions florales FLORA"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  loading="lazy"
                 />
               </div>
 
@@ -163,7 +186,7 @@ export default function ContactPage() {
                       <input
                         {...register("name")}
                         placeholder="Jean Dupont"
-                        className="input-on-video w-full py-3 font-poppins text-sm"
+                        className="input-on-video w-full py-3.5 font-poppins text-sm"
                       />
                     </Field>
                     <Field label="Email" error={errors.email?.message}>
@@ -171,7 +194,7 @@ export default function ContactPage() {
                         {...register("email")}
                         type="email"
                         placeholder="vous@email.com"
-                        className="input-on-video w-full py-3 font-poppins text-sm"
+                        className="input-on-video w-full py-3.5 font-poppins text-sm"
                       />
                     </Field>
                   </div>
@@ -180,7 +203,7 @@ export default function ContactPage() {
                     <input
                       {...register("subject")}
                       placeholder="Commande sur mesure, événement..."
-                      className="input-on-video w-full py-3 font-poppins text-sm"
+                      className="input-on-video w-full py-3.5 font-poppins text-sm"
                     />
                   </Field>
 
@@ -189,15 +212,14 @@ export default function ContactPage() {
                       {...register("message")}
                       rows={6}
                       placeholder="Décrivez votre projet floral..."
-                      className="input-on-video w-full resize-none py-3 font-poppins text-sm leading-relaxed"
+                      className="input-on-video w-full resize-none py-3.5 font-poppins text-sm leading-relaxed"
                     />
                   </Field>
 
                   <button
                     type="submit"
                     disabled={isSubmitting || sent}
-                    data-cursor="hover"
-                    className="flora-btn-primary flex w-full items-center justify-center gap-2 py-4 font-poppins text-xs tracking-[0.15em] uppercase disabled:opacity-60"
+                    className="flora-btn-primary flex w-full items-center justify-center gap-2 py-4 font-poppins text-sm font-medium disabled:opacity-60"
                   >
                     {isSubmitting ? (
                       "Envoi en cours..."

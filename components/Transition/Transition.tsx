@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
+import PageLoader from "@/components/PageLoader";
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
   const prevPath = useRef(pathname);
   const isFirstRender = useRef(true);
   const [displayChildren, setDisplayChildren] = useState(children);
+  const [loading, setLoading] = useState(false);
 
   childrenRef.current = children;
 
@@ -40,26 +42,36 @@ export default function PageTransition({ children }: PageTransitionProps) {
 
     window.scrollTo(0, 0);
     gsap.killTweensOf(el);
+    setLoading(true);
 
     gsap.to(el, {
       opacity: 0,
-      scale: 0.97,
-      duration: 0.32,
-      ease: "power2.in",
+      scale: 0.96,
+      filter: "blur(6px)",
+      duration: 0.45,
+      ease: "power3.inOut",
       onComplete: () => {
         prevPath.current = pathname;
         setDisplayChildren(childrenRef.current);
 
         requestAnimationFrame(() => {
-          if (!contentRef.current) return;
+          if (!contentRef.current) {
+            setLoading(false);
+            return;
+          }
           gsap.fromTo(
             contentRef.current,
-            { opacity: 0, scale: 0.98 },
+            { opacity: 0, scale: 0.97, filter: "blur(8px)" },
             {
               opacity: 1,
               scale: 1,
-              duration: 0.42,
-              ease: "power2.out",
+              filter: "blur(0px)",
+              duration: 0.6,
+              ease: "power3.out",
+              onComplete: () => {
+                gsap.set(contentRef.current, { clearProps: "filter" });
+                setLoading(false);
+              },
             }
           );
         });
@@ -68,10 +80,13 @@ export default function PageTransition({ children }: PageTransitionProps) {
   }, [pathname, children]);
 
   return (
-    <div className="relative">
-      <div ref={contentRef} style={{ transformOrigin: "center top" }}>
-        {displayChildren}
+    <>
+      <PageLoader active={loading} />
+      <div className="relative">
+        <div ref={contentRef} className="origin-top">
+          {displayChildren}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

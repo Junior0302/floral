@@ -8,6 +8,8 @@ import { useEffect, useRef } from "react";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import ProductCard from "@/components/ProductCard";
 import Footer from "@/components/Footer";
+import Image from "next/image";
+import { pageHeroImages } from "@/lib/data/site";
 import {
   products,
   occasions,
@@ -25,6 +27,7 @@ export default function BoutiquePage() {
   const [collection, setCollection] = useState("Tous");
   const [priceRange, setPriceRange] = useState(0);
   const headerRef = useRef<HTMLElement>(null);
+  const heroImageRef = useRef<HTMLDivElement>(null);
 
   const filtered = useMemo(() => {
     const range = priceRanges[priceRange];
@@ -43,12 +46,26 @@ export default function BoutiquePage() {
   }, [search, occasion, color, collection, priceRange]);
 
   useEffect(() => {
-    if (!headerRef.current) return;
-    gsap.fromTo(
-      headerRef.current,
-      { opacity: 0, scale: 0.97 },
-      { opacity: 1, scale: 1, duration: 0.75, ease: "power3.out", delay: 0.1 }
-    );
+    if (headerRef.current) {
+      gsap.fromTo(
+        headerRef.current,
+        { opacity: 0, scale: 0.97 },
+        { opacity: 1, scale: 1, duration: 0.75, ease: "power3.out", delay: 0.1 }
+      );
+    }
+    if (heroImageRef.current) {
+      gsap.fromTo(
+        heroImageRef.current,
+        { opacity: 0, scale: 1.03 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: { trigger: heroImageRef.current, start: "top 85%" },
+        }
+      );
+    }
   }, []);
 
   return (
@@ -62,8 +79,26 @@ export default function BoutiquePage() {
         <p className="flora-body mt-6 max-w-lg font-poppins text-base leading-relaxed md:text-lg">
           Découvrez nos créations florales, composées avec passion et livrées avec soin.
         </p>
+      </section>
 
-        <div className="mt-14 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+      <section className="px-6 pb-8 md:px-12 lg:px-16">
+        <div
+          ref={heroImageRef}
+          className="float-image relative mx-auto aspect-[21/9] max-w-5xl overflow-hidden"
+        >
+          <Image
+            src={pageHeroImages["/boutique"]}
+            alt="Collection florale FLORA"
+            fill
+            className="object-cover"
+            sizes="(max-width: 1280px) 100vw, 1024px"
+            priority
+          />
+        </div>
+      </section>
+
+      <section className="section-spacious px-6 md:px-12 lg:px-16 pt-0">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="relative max-w-sm">
             <Search
               size={15}

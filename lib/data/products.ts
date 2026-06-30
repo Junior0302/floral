@@ -19,7 +19,7 @@ export const products: Product[] = [
     occasion: "Anniversaire",
     color: "Rose",
     collection: "Signature",
-    image: "/flowers/1.png",
+    image: "/flowers/7.png",
     description: "Un bouquet délicat aux tons roses et corail, composé à la main.",
   },
   {
@@ -110,9 +110,3 @@ export const priceRanges = [
   { label: "80€ – 120€", min: 80, max: 120 },
   { label: "Plus de 120€", min: 120, max: Infinity },
 ];
-
-export const pageBackgrounds: Record<string, string> = {
-  "/boutique": "/images/3.png",
-  "/about": "/images/1.png",
-  "/contact": "/images/2.png",
-};

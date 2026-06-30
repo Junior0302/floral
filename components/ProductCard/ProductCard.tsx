@@ -75,7 +75,7 @@ function ProductCard({ product, index = 0 }: ProductCardProps) {
         <button
           onClick={() => toggleFavorite(product.id)}
           data-cursor="hover"
-          className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 backdrop-blur-md transition-colors hover:bg-black/55"
+          className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 transition-colors hover:bg-black/65"
           aria-label={favorited ? "Retirer des favoris" : "Ajouter aux favoris"}
         >
           <Heart
@@ -91,7 +91,7 @@ function ProductCard({ product, index = 0 }: ProductCardProps) {
             <Check size={10} /> Dans le panier
           </span>
         )}
-        <span className="flora-body absolute bottom-4 left-4 rounded-full bg-black/40 px-3 py-1 font-poppins text-[10px] tracking-widest uppercase backdrop-blur-md">
+        <span className="flora-body absolute bottom-4 left-4 rounded-full bg-black/50 px-3 py-1 font-poppins text-[10px] tracking-widest uppercase">
           {product.category}
         </span>
       </div>
@@ -108,8 +108,8 @@ function ProductCard({ product, index = 0 }: ProductCardProps) {
           <button
             ref={addBtnRef}
             onClick={handleAdd}
-            data-cursor="hover"
-            className="flora-btn-primary flex flex-1 items-center justify-center gap-2 py-3.5 font-poppins text-[10px] tracking-[0.12em] uppercase"
+          data-cursor="hover"
+          className="flora-btn-primary flex flex-1 items-center justify-center gap-2 py-3.5 font-poppins text-sm font-medium"
           >
             <ShoppingBag size={14} />
             Ajouter
@@ -117,8 +117,8 @@ function ProductCard({ product, index = 0 }: ProductCardProps) {
           {inCart && (
             <button
               onClick={() => setCartOpen(true)}
-              data-cursor="hover"
-              className="flora-btn-ghost px-4 py-3.5 font-poppins text-[10px] tracking-[0.12em] uppercase"
+                    data-cursor="hover"
+                    className="flora-btn-ghost px-5 py-3.5 font-poppins text-sm font-medium"
             >
               Voir
             </button>

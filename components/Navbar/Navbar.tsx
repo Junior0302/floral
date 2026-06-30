@@ -46,68 +46,67 @@ function Navbar() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-12 lg:px-16",
-          scrolled ? "glass-nav-scrolled" : "glass-nav"
+          "fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-10 md:py-5 lg:px-14",
+          mobileOpen
+            ? "nav-solid"
+            : scrolled
+              ? "glass-nav-scrolled"
+              : "glass-nav"
         )}
       >
-        <Link href="/" className="group flex items-center gap-2.5" data-cursor="hover">
+        <Link href="/" className="group flex items-center gap-3" data-cursor="hover">
           <Image
             src="/logo.svg"
             alt="FLORA"
-            width={28}
-            height={28}
-            className="drop-shadow-[0_2px_8px_rgba(255,255,255,0.3)]"
+            width={32}
+            height={32}
             priority
+            className="transition-transform duration-500 group-hover:scale-105"
           />
-          <span className="flora-title font-playfair text-base tracking-[0.22em] md:text-lg">
+          <span className="flora-title font-playfair text-lg tracking-[0.2em] md:text-xl">
             FLORA
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center gap-10 lg:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               data-cursor="hover"
               className={cn(
-                "relative font-poppins text-xs tracking-[0.14em] uppercase transition-colors duration-300",
-                pathname === link.href
-                  ? "flora-title"
-                  : "flora-body opacity-80 hover:opacity-100"
+                "flora-nav-link font-poppins text-sm font-medium tracking-wide md:text-[15px]",
+                pathname === link.href && "flora-nav-link-active"
               )}
             >
               {link.label}
-              {pathname === link.href && (
-                <span className="absolute -bottom-1.5 left-1/2 h-px w-4 -translate-x-1/2 bg-flora-coral" />
-              )}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 md:gap-5">
           <button
             aria-label="Rechercher"
             data-cursor="hover"
-            className="hidden text-white/90 transition-colors hover:text-white sm:block"
+            className="nav-action-btn hidden sm:flex"
           >
-            <Search size={18} strokeWidth={1.75} />
+            <Search size={20} strokeWidth={1.75} />
           </button>
           <button
             aria-label="Compte"
             data-cursor="hover"
-            className="hidden text-white/90 transition-colors hover:text-white sm:block"
+            className="nav-action-btn hidden sm:flex"
           >
-            <User size={18} strokeWidth={1.75} />
+            <User size={20} strokeWidth={1.75} />
           </button>
           <button
             aria-label="Favoris"
             data-cursor="hover"
-            className="relative text-white/90 transition-colors hover:text-white"
+            className="nav-action-btn relative"
           >
-            <Heart size={18} strokeWidth={1.75} />
+            <Heart size={20} strokeWidth={1.75} />
             {favCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-flora-coral text-[9px] text-white">
+              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-flora-coral text-[10px] font-semibold text-white">
                 {favCount}
               </span>
             )}
@@ -116,11 +115,11 @@ function Navbar() {
             aria-label="Panier"
             data-cursor="hover"
             onClick={() => setCartOpen(true)}
-            className="relative text-white/90 transition-colors hover:text-white"
+            className="nav-action-btn relative"
           >
-            <ShoppingBag size={18} strokeWidth={1.75} />
+            <ShoppingBag size={20} strokeWidth={1.75} />
             {cartCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-flora-coral text-[9px] text-white">
+              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-flora-coral text-[10px] font-semibold text-white">
                 {cartCount}
               </span>
             )}
@@ -128,31 +127,41 @@ function Navbar() {
           <button
             aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
             data-cursor="hover"
-            className="text-white lg:hidden"
+            className="nav-action-btn lg:hidden"
             onClick={() => setMobileOpen((o) => !o)}
           >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </header>
 
       {mobileOpen && (
-        <div className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden">
-          <nav className="flex h-full flex-col items-center justify-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                data-cursor="hover"
-                className={cn(
-                  "font-poppins text-lg tracking-[0.15em] uppercase",
-                  pathname === link.href ? "flora-title" : "flora-body"
-                )}
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
+        <div className="mobile-nav-panel fixed inset-0 z-40 lg:hidden">
+          <nav className="flex h-full flex-col px-8 pt-28 pb-10">
+            <p className="flora-muted mb-8 font-poppins text-[10px] tracking-[0.3em] uppercase">
+              Menu
+            </p>
+            <div className="flex flex-col gap-3">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  data-cursor="hover"
+                  className={cn(
+                    "mobile-nav-link",
+                    pathname === link.href && "mobile-nav-link-active"
+                  )}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            <div className="mt-auto border-t border-white/10 pt-8">
+              <p className="flora-muted font-poppins text-xs">
+                FLORA — Luxury Floral Experience
+              </p>
+            </div>
           </nav>
         </div>
       )}

@@ -31,7 +31,7 @@ function ToastContainer() {
           <div
             key={toast.id}
             className={cn(
-              "toast-animate flex items-start gap-3 rounded-2xl border p-4 shadow-2xl backdrop-blur-xl",
+              "toast-animate flex items-start gap-3 rounded-2xl border p-4 shadow-2xl",
               styles[toast.type]
             )}
             role="alert"

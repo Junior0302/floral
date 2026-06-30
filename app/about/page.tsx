@@ -30,11 +30,10 @@ export default function AboutPage() {
     if (imageRef.current) {
       gsap.fromTo(
         imageRef.current,
-        { opacity: 0, scale: 1.04, filter: "blur(8px)" },
+        { opacity: 0, scale: 1.03 },
         {
           opacity: 1,
           scale: 1,
-          filter: "blur(0px)",
           duration: 1,
           ease: "power3.out",
           scrollTrigger: { trigger: imageRef.current, start: "top 85%" },
@@ -72,8 +71,8 @@ export default function AboutPage() {
           className="float-image relative mx-auto aspect-[21/9] max-w-5xl"
         >
           <Image
-            src="/flowers/7.png"
-            alt="Atelier FLORA"
+            src="/images/bg1.jpg"
+            alt="Univers floral FLORA"
             fill
             className="object-cover"
             priority
@@ -145,11 +144,10 @@ function TimelineItem({
     if (!ref.current) return;
     gsap.fromTo(
       ref.current,
-      { x: index % 2 === 0 ? -20 : 20, opacity: 0, filter: "blur(4px)" },
+      { opacity: 0, y: 16 },
       {
-        x: 0,
         opacity: 1,
-        filter: "blur(0px)",
+        y: 0,
         duration: 0.75,
         ease: "power3.out",
         scrollTrigger: { trigger: ref.current, start: "top 88%" },

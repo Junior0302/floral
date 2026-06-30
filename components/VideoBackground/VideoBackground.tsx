@@ -9,22 +9,14 @@ function VideoBackground() {
     const video = videoRef.current;
     if (!video) return;
 
-    video.playbackRate = 1;
-    const play = () => {
-      video.play().catch(() => {});
-    };
-
-    if (video.readyState >= 2) {
-      play();
-    } else {
-      video.addEventListener("canplay", play, { once: true });
-    }
-
+    const play = () => video.play().catch(() => {});
+    if (video.readyState >= 2) play();
+    else video.addEventListener("canplay", play, { once: true });
     return () => video.removeEventListener("canplay", play);
   }, []);
 
   return (
-    <div className="fixed inset-0 z-0 h-full w-full overflow-hidden" aria-hidden>
+    <div className="fixed inset-0 z-0 overflow-hidden" aria-hidden>
       <video
         ref={videoRef}
         autoPlay
@@ -36,7 +28,6 @@ function VideoBackground() {
       >
         <source src="/floral.mp4" type="video/mp4" />
       </video>
-      <div className="hero-overlay absolute inset-0" />
     </div>
   );
 }

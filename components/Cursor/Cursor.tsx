@@ -2,115 +2,132 @@
 
 import { memo, useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { cn } from "@/utils/cn";
 
-function Cursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
+interface CursorProps {
+  variant?: "default" | "welcome";
+}
+
+function Cursor({ variant = "default" }: CursorProps) {
+  const ringRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
   const haloRef = useRef<HTMLDivElement>(null);
+  const isWelcome = variant === "welcome";
 
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
 
-    const cursor = cursorRef.current;
+    document.body.classList.add("flora-custom-cursor");
+
+    const ring = ringRef.current;
+    const dot = dotRef.current;
     const halo = haloRef.current;
-    if (!cursor || !halo) return;
+    if (!ring || !dot || !halo) return;
 
-    const pos = { x: 0, y: 0 };
-    const target = { x: 0, y: 0 };
+    const pos = { x: -100, y: -100 };
+    const target = { x: -100, y: -100 };
     let rafId: number;
+    let hovering = false;
 
-    const setCursor = gsap.quickSetter(cursor, "css");
+    const setRing = gsap.quickSetter(ring, "css");
+    const setDot = gsap.quickSetter(dot, "css");
     const setHalo = gsap.quickSetter(halo, "css");
+
+    const lerp = isWelcome ? 0.11 : 0.1;
 
     const onMove = (e: MouseEvent) => {
       target.x = e.clientX;
       target.y = e.clientY;
     };
 
+    const onOver = (e: MouseEvent) => {
+      const el = (e.target as HTMLElement).closest(
+        'a, button, [data-cursor="hover"], input, textarea, select, label'
+      );
+      if (el && !hovering) {
+        hovering = true;
+        gsap.to(ring, {
+          scale: 1.18,
+          borderColor: "rgba(224, 122, 95, 0.7)",
+          duration: 0.55,
+          ease: "sine.out",
+        });
+        gsap.to(dot, { scale: 0.6, opacity: 0.85, duration: 0.45, ease: "sine.out" });
+        gsap.to(halo, { opacity: 0.65, scale: 1.15, duration: 0.55, ease: "sine.out" });
+      }
+    };
+
+    const onOut = (e: MouseEvent) => {
+      const related = e.relatedTarget as HTMLElement | null;
+      if (related?.closest('a, button, [data-cursor="hover"], input, textarea, select, label')) return;
+      if (hovering) {
+        hovering = false;
+        gsap.to(ring, {
+          scale: 1,
+          borderColor: "rgba(255, 255, 255, 0.35)",
+          duration: 0.55,
+          ease: "sine.out",
+        });
+        gsap.to(dot, { scale: 1, opacity: 1, duration: 0.45, ease: "sine.out" });
+        gsap.to(halo, { opacity: isWelcome ? 0.4 : 0.28, scale: 1, duration: 0.55, ease: "sine.out" });
+      }
+    };
+
     const animate = () => {
-      pos.x += (target.x - pos.x) * 0.22;
-      pos.y += (target.y - pos.y) * 0.22;
+      pos.x += (target.x - pos.x) * lerp;
+      pos.y += (target.y - pos.y) * lerp;
       const t = `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`;
-      setCursor({ transform: t });
+      setRing({ transform: t });
+      setDot({ transform: t });
       setHalo({ transform: t });
       rafId = requestAnimationFrame(animate);
     };
 
-    const onOver = (e: MouseEvent) => {
-      const t = e.target as HTMLElement;
-      if (!t.closest("a, button, [data-cursor='hover']")) return;
-      gsap.to(cursor, { scale: 1.8, duration: 0.25 });
-      gsap.to(halo, { scale: 1.6, opacity: 0.7, duration: 0.25 });
-    };
-
-    const onOut = (e: MouseEvent) => {
-      const from = e.target as HTMLElement;
-      const to = e.relatedTarget as HTMLElement | null;
-      if (from.closest("a, button, [data-cursor='hover']") && to?.closest("a, button, [data-cursor='hover']")) return;
-      gsap.to(cursor, { scale: 1, duration: 0.25 });
-      gsap.to(halo, { scale: 1, opacity: 0.45, duration: 0.25 });
-    };
-
-    const onMagneticMove = (e: MouseEvent) => {
-      const el = (e.currentTarget as HTMLElement);
-      const rect = el.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      gsap.to(el, {
-        x: (e.clientX - cx) * 0.25,
-        y: (e.clientY - cy) * 0.25,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    };
-
-    const onMagneticLeave = (e: MouseEvent) => {
-      gsap.to(e.currentTarget as HTMLElement, {
-        x: 0,
-        y: 0,
-        duration: 0.4,
-        ease: "power2.out",
-        clearProps: "transform",
-      });
-    };
-
     window.addEventListener("mousemove", onMove, { passive: true });
-    document.addEventListener("mouseover", onOver);
-    document.addEventListener("mouseout", onOut);
+    document.addEventListener("mouseover", onOver, { passive: true });
+    document.addEventListener("mouseout", onOut, { passive: true });
     rafId = requestAnimationFrame(animate);
 
-    const magneticEls = document.querySelectorAll("[data-magnetic]");
-    magneticEls.forEach((el) => {
-      el.addEventListener("mousemove", onMagneticMove as EventListener);
-      el.addEventListener("mouseleave", onMagneticLeave as EventListener);
-    });
-
     return () => {
+      document.body.classList.remove("flora-custom-cursor");
       window.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseover", onOver);
       document.removeEventListener("mouseout", onOut);
       cancelAnimationFrame(rafId);
-      magneticEls.forEach((el) => {
-        el.removeEventListener("mousemove", onMagneticMove as EventListener);
-        el.removeEventListener("mouseleave", onMagneticLeave as EventListener);
-      });
     };
-  }, []);
+  }, [isWelcome]);
 
   return (
     <>
       <div
         ref={haloRef}
-        className="pointer-events-none fixed top-0 left-0 z-[9998] hidden h-10 w-10 rounded-full md:block"
+        className={cn(
+          "pointer-events-none fixed top-0 left-0 hidden rounded-full md:block",
+          isWelcome ? "z-[10001] h-20 w-20" : "z-[9998] h-14 w-14"
+        )}
         style={{
-          background: "radial-gradient(circle, rgba(255,200,180,0.35) 0%, transparent 70%)",
-          opacity: 0.45,
+          background:
+            "radial-gradient(circle, rgba(224,122,95,0.18) 0%, rgba(255,180,160,0.08) 50%, transparent 75%)",
+          opacity: isWelcome ? 0.4 : 0.28,
         }}
         aria-hidden
       />
       <div
-        ref={cursorRef}
-        className="pointer-events-none fixed top-0 left-0 z-[9999] hidden h-1.5 w-1.5 rounded-full bg-white md:block"
-        style={{ boxShadow: "0 0 8px rgba(255,255,255,0.9)" }}
+        ref={ringRef}
+        className={cn(
+          "pointer-events-none fixed top-0 left-0 hidden rounded-full border md:block",
+          isWelcome ? "z-[10002] h-9 w-9 border-white/40" : "z-[9999] h-7 w-7 border-white/35"
+        )}
+        style={{ boxShadow: "0 0 12px rgba(255,255,255,0.08)" }}
+        aria-hidden
+      />
+      <div
+        ref={dotRef}
+        className={cn(
+          "pointer-events-none fixed top-0 left-0 hidden rounded-full md:block",
+          isWelcome ? "z-[10003] h-1.5 w-1.5 bg-flora-coral/90" : "z-[10000] h-1 w-1 bg-white/85"
+        )}
+        style={{ boxShadow: "0 0 6px rgba(255,255,255,0.45)" }}
         aria-hidden
       />
     </>

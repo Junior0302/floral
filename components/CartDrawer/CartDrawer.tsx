@@ -28,13 +28,13 @@ function CartDrawer() {
   return (
     <>
       <div
-        className="fixed inset-0 z-[150] bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 z-[150] bg-black/65"
         onClick={() => setCartOpen(false)}
         aria-hidden
       />
 
       <aside
-        className="fixed top-0 right-0 z-[160] flex h-full w-full max-w-md flex-col border-l border-white/10 bg-black/90 shadow-2xl backdrop-blur-2xl"
+        className="fixed top-0 right-0 z-[160] flex h-full w-full max-w-md flex-col border-l border-white/10 bg-black/92 shadow-2xl"
         role="dialog"
         aria-label="Panier"
       >
