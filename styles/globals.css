@@ -205,18 +205,14 @@
     width: 2.25rem;
     border-radius: 9999px;
     color: rgba(255, 255, 255, 0.88);
-    transition:
-      color 0.4s ease,
-      background 0.4s ease,
-      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.4s ease;
+    transition: color 0.3s ease, background 0.3s ease;
   }
 
-  .nav-action-btn:hover {
-    color: #ffffff;
-    background: rgba(224, 122, 95, 0.18);
-    transform: translateY(-1px) scale(1.06);
-    box-shadow: 0 4px 16px rgba(224, 122, 95, 0.2);
+  @media (hover: hover) {
+    .nav-action-btn:hover {
+      color: #ffffff;
+      background: rgba(224, 122, 95, 0.15);
+    }
   }
 
   .flora-nav-link {
@@ -265,29 +261,29 @@
 
   .mobile-nav-link {
     display: block;
-    padding: 1rem 1.25rem;
+    padding: 0.95rem 1.15rem;
     border-radius: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: #141414;
     color: rgba(255, 255, 255, 0.88);
     font-family: var(--font-poppins), sans-serif;
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 500;
-    letter-spacing: 0.04em;
-    transition:
-      background 0.35s ease,
-      border-color 0.35s ease,
-      color 0.35s ease,
-      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.35s ease;
+    letter-spacing: 0.03em;
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
   }
 
-  .mobile-nav-link:hover {
-    background: #1a1a1a;
+  @media (hover: hover) {
+    .mobile-nav-link:hover {
+      background: #1a1a1a;
+      border-color: rgba(224, 122, 95, 0.4);
+      color: #ffffff;
+    }
+  }
+
+  .mobile-nav-link:active {
+    background: rgba(224, 122, 95, 0.1);
     border-color: rgba(224, 122, 95, 0.45);
-    color: #ffffff;
-    transform: translateX(4px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   }
 
   .mobile-nav-link-active {
@@ -394,81 +390,47 @@
   /* ── Boutons ── */
   .flora-btn-primary {
     position: relative;
-    overflow: hidden;
     background: var(--color-flora-coral);
     color: #ffffff;
     border-radius: 9999px;
     font-weight: 500;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
-    transition:
-      background 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-      letter-spacing 0.45s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, opacity 0.3s ease;
   }
 
-  .flora-btn-primary::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, rgba(255, 255, 255, 0.22) 0%, transparent 55%);
-    opacity: 0;
-    transition: opacity 0.45s ease;
-  }
-
-  .flora-btn-primary:hover {
-    background: #e0856d;
-    transform: translateY(-2px) scale(1.02);
-    box-shadow:
-      0 12px 32px rgba(224, 122, 95, 0.32),
-      0 4px 14px rgba(0, 0, 0, 0.18);
-    letter-spacing: 0.02em;
-  }
-
-  .flora-btn-primary:hover::after {
-    opacity: 1;
+  @media (hover: hover) {
+    .flora-btn-primary:hover {
+      background: #d4694f;
+      opacity: 0.95;
+    }
   }
 
   .flora-btn-primary:active {
-    transform: translateY(0) scale(0.99);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    opacity: 0.88;
   }
 
-  .flora-btn-primary:disabled:hover {
-    transform: none;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
-    letter-spacing: inherit;
-  }
-
-  .flora-btn-primary:disabled:hover::after {
-    opacity: 0;
+  .flora-btn-primary:disabled {
+    opacity: 0.6;
   }
 
   .flora-btn-ghost {
-    position: relative;
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.42);
     background: rgba(255, 255, 255, 0.05);
     border-radius: 9999px;
     font-weight: 500;
-    transition:
-      border-color 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-      background 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: border-color 0.3s ease, background 0.3s ease;
   }
 
-  .flora-btn-ghost:hover {
-    border-color: rgba(255, 255, 255, 0.82);
-    background: rgba(255, 255, 255, 0.11);
-    transform: translateY(-2px);
-    box-shadow:
-      0 10px 28px rgba(0, 0, 0, 0.18),
-      inset 0 0 24px rgba(255, 255, 255, 0.04);
+  @media (hover: hover) {
+    .flora-btn-ghost:hover {
+      border-color: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+    }
   }
 
   .flora-btn-ghost:active {
-    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.14);
   }
 
   .flora-icon-btn {
@@ -481,20 +443,15 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
     background: rgba(255, 255, 255, 0.05);
     color: rgba(255, 255, 255, 0.78);
-    transition:
-      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 0.45s ease,
-      background 0.45s ease,
-      color 0.45s ease,
-      box-shadow 0.45s ease;
+    transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
   }
 
-  .flora-icon-btn:hover {
-    transform: translateY(-2px) scale(1.06);
-    border-color: rgba(224, 122, 95, 0.55);
-    background: rgba(224, 122, 95, 0.12);
-    color: #ffffff;
-    box-shadow: 0 8px 22px rgba(224, 122, 95, 0.18);
+  @media (hover: hover) {
+    .flora-icon-btn:hover {
+      border-color: rgba(224, 122, 95, 0.5);
+      background: rgba(224, 122, 95, 0.12);
+      color: #ffffff;
+    }
   }
 
   .flora-link-hover {

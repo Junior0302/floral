@@ -71,18 +71,18 @@ export default function Hero() {
           La beauté naturelle, livrée avec soin.
         </p>
 
-        <div ref={buttonsRef} className="mt-10 flex flex-col gap-4 sm:flex-row sm:gap-5">
+        <div ref={buttonsRef} className="mt-10 flex w-full max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:gap-4">
           <Link
             href="/boutique"
             data-cursor="hover"
-            className="flora-btn-primary px-8 py-3.5 font-poppins text-xs tracking-[0.18em] uppercase"
+            className="flora-btn-primary w-full px-8 py-3.5 text-center font-poppins text-xs tracking-[0.15em] uppercase sm:w-auto"
           >
             Découvrir la collection
           </Link>
           <Link
             href="/boutique"
             data-cursor="hover"
-            className="flora-btn-ghost px-8 py-3.5 font-poppins text-xs tracking-[0.18em] uppercase"
+            className="flora-btn-ghost w-full px-8 py-3.5 text-center font-poppins text-xs tracking-[0.15em] uppercase sm:w-auto"
           >
             Commander maintenant
           </Link>

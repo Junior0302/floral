@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import PageLoader from "@/components/PageLoader";
 import { LOADER_DURATION_MS } from "@/lib/constants/loader";
+import { useUiStore } from "@/lib/store/ui";
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -17,6 +18,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
   const prevPath = useRef(pathname);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const transitionIdRef = useRef(0);
+  const setPageLoading = useUiStore((s) => s.setPageLoading);
   const [displayChildren, setDisplayChildren] = useState(children);
   const [loading, setLoading] = useState(false);
 
@@ -44,7 +46,8 @@ export default function PageTransition({ children }: PageTransitionProps) {
     if (el) gsap.killTweensOf(el);
 
     setLoading(true);
-    if (el) gsap.set(el, { opacity: 0, scale: 0.985 });
+    setPageLoading(true);
+    if (el) gsap.set(el, { opacity: 0 });
 
     prevPath.current = pathname;
     setDisplayChildren(childrenRef.current);
@@ -54,19 +57,19 @@ export default function PageTransition({ children }: PageTransitionProps) {
       if (transitionIdRef.current !== transitionId) return;
 
       setLoading(false);
+      setPageLoading(false);
 
       if (contentRef.current) {
         gsap.to(contentRef.current, {
           opacity: 1,
-          scale: 1,
-          duration: 0.38,
-          ease: "power3.out",
+          duration: 0.32,
+          ease: "power2.out",
         });
       }
 
       hideTimerRef.current = null;
     }, LOADER_DURATION_MS);
-  }, [pathname]);
+  }, [pathname, setPageLoading]);
 
   return (
     <>
