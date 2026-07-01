@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import PageLoader from "@/components/PageLoader";
+import { LOADER_DURATION_MS } from "@/lib/constants/loader";
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -15,10 +16,29 @@ export default function PageTransition({ children }: PageTransitionProps) {
   const childrenRef = useRef(children);
   const prevPath = useRef(pathname);
   const isFirstRender = useRef(true);
+  const loaderStartedAt = useRef(0);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [displayChildren, setDisplayChildren] = useState(children);
   const [loading, setLoading] = useState(false);
 
   childrenRef.current = children;
+
+  const hideLoader = () => {
+    const elapsed = Date.now() - loaderStartedAt.current;
+    const remaining = Math.max(0, LOADER_DURATION_MS - elapsed);
+
+    if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    hideTimerRef.current = setTimeout(() => {
+      setLoading(false);
+      hideTimerRef.current = null;
+    }, remaining);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (pathname === prevPath.current) {
@@ -42,6 +62,9 @@ export default function PageTransition({ children }: PageTransitionProps) {
 
     window.scrollTo(0, 0);
     gsap.killTweensOf(el);
+    if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+
+    loaderStartedAt.current = Date.now();
     setLoading(true);
 
     gsap.to(el, {
@@ -56,7 +79,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
 
         requestAnimationFrame(() => {
           if (!contentRef.current) {
-            setLoading(false);
+            hideLoader();
             return;
           }
           gsap.fromTo(
@@ -70,7 +93,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
               ease: "power3.out",
               onComplete: () => {
                 gsap.set(contentRef.current, { clearProps: "filter" });
-                setLoading(false);
+                hideLoader();
               },
             }
           );

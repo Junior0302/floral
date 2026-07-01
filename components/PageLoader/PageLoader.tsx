@@ -3,6 +3,7 @@
 import { memo, useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
+import { LOADER_DURATION_MS } from "@/lib/constants/loader";
 
 interface PageLoaderProps {
   active: boolean;
@@ -56,7 +57,14 @@ function PageLoader({ active }: PageLoaderProps) {
 
     if (active) {
       gsap.set(root, { display: "flex", opacity: 1, pointerEvents: "auto" });
-      if (bar) gsap.fromTo(bar, { scaleX: 0 }, { scaleX: 0.9, duration: 0.38, ease: "power2.out" });
+      if (bar) {
+        gsap.killTweensOf(bar);
+        gsap.fromTo(bar, { scaleX: 0 }, {
+          scaleX: 1,
+          duration: LOADER_DURATION_MS / 1000,
+          ease: "power1.inOut",
+        });
+      }
     } else {
       gsap.to(root, {
         opacity: 0,
