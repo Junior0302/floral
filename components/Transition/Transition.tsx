@@ -15,7 +15,6 @@ export default function PageTransition({ children }: PageTransitionProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const childrenRef = useRef(children);
   const prevPath = useRef(pathname);
-  const isFirstRender = useRef(true);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const transitionIdRef = useRef(0);
   const [displayChildren, setDisplayChildren] = useState(children);
@@ -29,7 +28,6 @@ export default function PageTransition({ children }: PageTransitionProps) {
     };
   }, []);
 
-  /* Sync contenu sans relancer la transition */
   useEffect(() => {
     if (pathname === prevPath.current && !loading) {
       setDisplayChildren(children);
@@ -38,13 +36,6 @@ export default function PageTransition({ children }: PageTransitionProps) {
 
   useEffect(() => {
     if (pathname === prevPath.current) return;
-
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      prevPath.current = pathname;
-      setDisplayChildren(childrenRef.current);
-      return;
-    }
 
     const el = contentRef.current;
     const transitionId = ++transitionIdRef.current;
