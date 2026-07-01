@@ -3,76 +3,68 @@
 import { memo, useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
-import { LOADER_DURATION_MS } from "@/lib/constants/loader";
+import { LOADER_DURATION_MS, LOADER_FADE_OUT_MS } from "@/lib/constants/loader";
 
 interface PageLoaderProps {
   active: boolean;
 }
 
-const PARTICLES = Array.from({ length: 6 }, (_, i) => ({
-  id: i,
-  left: 20 + i * 12,
-  delay: i * 0.08,
-}));
-
 function PageLoader({ active }: PageLoaderProps) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const logoWrapRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
-  const particlesRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!glowRef.current) return;
-    gsap.to(glowRef.current, {
-      opacity: 0.55,
-      scale: 1.12,
-      duration: 1.4,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
-  }, []);
-
-  useEffect(() => {
-    const container = particlesRef.current;
-    if (!container) return;
-    const dots = container.querySelectorAll(".loader-particle");
-    dots.forEach((dot, i) => {
-      gsap.to(dot, {
-        y: -12 - i * 2,
-        opacity: 0.7,
-        duration: 1.2 + i * 0.1,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: PARTICLES[i]?.delay ?? 0,
-      });
-    });
-  }, []);
+  const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = rootRef.current;
+    const logoWrap = logoWrapRef.current;
     const bar = barRef.current;
+    const ring = ringRef.current;
     if (!root) return;
 
     if (active) {
+      gsap.killTweensOf([root, logoWrap, bar, ring]);
       gsap.set(root, { display: "flex", opacity: 1, pointerEvents: "auto" });
+
+      if (logoWrap) {
+        gsap.fromTo(
+          logoWrap,
+          { scale: 0.82, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(1.6)" }
+        );
+      }
+
+      if (ring) {
+        gsap.fromTo(
+          ring,
+          { scale: 0.6, opacity: 0, rotation: -90 },
+          { scale: 1, opacity: 1, rotation: 0, duration: 0.5, ease: "power3.out" }
+        );
+        gsap.to(ring, {
+          rotation: 360,
+          duration: 1.1,
+          ease: "none",
+          repeat: -1,
+        });
+      }
+
       if (bar) {
-        gsap.killTweensOf(bar);
         gsap.fromTo(bar, { scaleX: 0 }, {
           scaleX: 1,
-          duration: LOADER_DURATION_MS / 1000,
-          ease: "power1.inOut",
+          duration: (LOADER_DURATION_MS - 200) / 1000,
+          ease: "power2.inOut",
         });
       }
     } else {
+      gsap.killTweensOf([logoWrap, bar, ring]);
       gsap.to(root, {
         opacity: 0,
-        duration: 0.32,
+        duration: LOADER_FADE_OUT_MS / 1000,
         ease: "power2.inOut",
         onComplete: () => {
-          gsap.set(root, { display: "none", pointerEvents: "none" });
+          gsap.set(root, { display: "none", pointerEvents: "none", opacity: 1 });
           if (bar) gsap.set(bar, { scaleX: 0 });
+          if (ring) gsap.set(ring, { rotation: 0 });
         },
       });
     }
@@ -81,32 +73,23 @@ function PageLoader({ active }: PageLoaderProps) {
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-[180] hidden items-center justify-center bg-black/72"
+      className="page-loader fixed inset-0 z-[180] hidden items-center justify-center"
       aria-hidden={!active}
       aria-live="polite"
+      aria-busy={active}
     >
-      <div ref={particlesRef} className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-        {PARTICLES.map((p) => (
-          <span
-            key={p.id}
-            className="loader-particle absolute bottom-[45%] h-1 w-1 rounded-full bg-flora-coral/50"
-            style={{ left: `${p.left}%`, opacity: 0.3 }}
-          />
-        ))}
-      </div>
-
-      <div className="flex flex-col items-center gap-8">
-        <div className="relative">
+      <div className="flex flex-col items-center gap-7">
+        <div ref={logoWrapRef} className="relative flex items-center justify-center">
           <div
-            ref={glowRef}
-            className="absolute inset-0 scale-100 rounded-full bg-flora-coral/15 blur-xl"
+            ref={ringRef}
+            className="absolute h-20 w-20 rounded-full border border-flora-coral/40"
             aria-hidden
           />
-          <Image src="/logo.svg" alt="" width={40} height={40} className="relative" priority />
+          <Image src="/logo.svg" alt="" width={36} height={36} className="relative" priority />
         </div>
-        <p className="flora-title font-playfair text-sm tracking-[0.35em]">FLORA</p>
-        <div className="h-px w-32 overflow-hidden bg-white/10">
-          <div ref={barRef} className="h-full origin-left bg-flora-coral/80" style={{ transform: "scaleX(0)" }} />
+        <p className="flora-title font-playfair text-xs tracking-[0.4em]">FLORA</p>
+        <div className="h-px w-28 overflow-hidden rounded-full bg-white/10">
+          <div ref={barRef} className="h-full origin-left bg-flora-coral" style={{ transform: "scaleX(0)" }} />
         </div>
       </div>
     </div>

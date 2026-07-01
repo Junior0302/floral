@@ -29,8 +29,8 @@ export default function Welcome({ onComplete }: WelcomeProps) {
     if (!contentRef.current) return;
     gsap.fromTo(
       contentRef.current,
-      { opacity: 0, y: 24, scale: 0.98 },
-      { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "power3.out", delay: 0.25 }
+      { opacity: 0, y: 20, scale: 0.97 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "power3.out", delay: 0.15 }
     );
   }, []);
 
@@ -43,10 +43,10 @@ export default function Welcome({ onComplete }: WelcomeProps) {
 
     const tl = gsap.timeline({ onComplete });
     if (contentRef.current) {
-      tl.to(contentRef.current, { opacity: 0, y: -16, duration: 0.45, ease: "power2.in" });
+      tl.to(contentRef.current, { opacity: 0, y: -12, duration: 0.35, ease: "power2.in" });
     }
     if (overlayRef.current) {
-      tl.to(overlayRef.current, { opacity: 0, duration: 0.65, ease: "power2.inOut" }, 0.15);
+      tl.to(overlayRef.current, { opacity: 0, duration: 0.45, ease: "power2.inOut" }, 0.1);
     }
   };
 
@@ -55,18 +55,6 @@ export default function Welcome({ onComplete }: WelcomeProps) {
       ref={overlayRef}
       className="welcome-screen fixed inset-0 z-[10000] flex items-center justify-center overflow-hidden"
     >
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        className="welcome-video absolute inset-0 h-full w-full object-cover"
-        aria-hidden
-      >
-        <source src="/floral.mp4" type="video/mp4" />
-      </video>
-
       <div ref={contentRef} className="welcome-card relative z-10 mx-6 flex max-w-md flex-col items-center px-10 py-14 text-center md:px-14 md:py-16">
         <Image src="/logo.svg" alt="" width={52} height={52} className="mb-7" priority />
         <h1 className="flora-title font-playfair text-5xl font-light tracking-[0.25em] md:text-6xl">

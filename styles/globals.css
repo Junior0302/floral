@@ -298,13 +298,18 @@
     }
   }
 
+  /* ── Loader pages (fond 100 % opaque) ── */
+  .page-loader {
+    background: #0a0a0a;
+  }
+
   /* ── Écran de chargement (opaque) ── */
   .welcome-screen {
     background: #0a0a0a;
   }
 
   .welcome-video {
-    opacity: 0.12;
+    display: none;
   }
 
   .welcome-card {

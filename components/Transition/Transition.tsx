@@ -18,19 +18,22 @@ export default function PageTransition({ children }: PageTransitionProps) {
   const isFirstRender = useRef(true);
   const loaderStartedAt = useRef(0);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const transitionIdRef = useRef(0);
   const [displayChildren, setDisplayChildren] = useState(children);
   const [loading, setLoading] = useState(false);
 
   childrenRef.current = children;
 
-  const hideLoader = () => {
+  const scheduleHideLoader = (transitionId: number, onDone: () => void) => {
     const elapsed = Date.now() - loaderStartedAt.current;
     const remaining = Math.max(0, LOADER_DURATION_MS - elapsed);
 
     if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
     hideTimerRef.current = setTimeout(() => {
+      if (transitionIdRef.current !== transitionId) return;
       setLoading(false);
       hideTimerRef.current = null;
+      onDone();
     }, remaining);
   };
 
@@ -54,52 +57,31 @@ export default function PageTransition({ children }: PageTransitionProps) {
     }
 
     const el = contentRef.current;
-    if (!el) {
-      prevPath.current = pathname;
-      setDisplayChildren(children);
-      return;
-    }
+    const transitionId = ++transitionIdRef.current;
 
-    window.scrollTo(0, 0);
-    gsap.killTweensOf(el);
     if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    gsap.killTweensOf(el);
 
     loaderStartedAt.current = Date.now();
     setLoading(true);
 
-    gsap.to(el, {
-      opacity: 0,
-      scale: 0.96,
-      filter: "blur(6px)",
-      duration: 0.45,
-      ease: "power3.inOut",
-      onComplete: () => {
-        prevPath.current = pathname;
-        setDisplayChildren(childrenRef.current);
+    if (el) gsap.set(el, { opacity: 0, scale: 0.98 });
 
-        requestAnimationFrame(() => {
-          if (!contentRef.current) {
-            hideLoader();
-            return;
-          }
-          gsap.fromTo(
-            contentRef.current,
-            { opacity: 0, scale: 0.97, filter: "blur(8px)" },
-            {
-              opacity: 1,
-              scale: 1,
-              filter: "blur(0px)",
-              duration: 0.6,
-              ease: "power3.out",
-              onComplete: () => {
-                gsap.set(contentRef.current, { clearProps: "filter" });
-                hideLoader();
-              },
-            }
-          );
-        });
-      },
-    });
+    prevPath.current = pathname;
+    setDisplayChildren(childrenRef.current);
+
+    const revealContent = () => {
+      if (transitionIdRef.current !== transitionId || !contentRef.current) return;
+      gsap.to(contentRef.current, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.42,
+        ease: "power3.out",
+      });
+    };
+
+    scheduleHideLoader(transitionId, revealContent);
+    window.scrollTo(0, 0);
   }, [pathname, children]);
 
   return (
