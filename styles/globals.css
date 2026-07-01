@@ -293,7 +293,7 @@
     box-shadow: 0 0 20px rgba(224, 122, 95, 0.15);
   }
 
-  @media (max-width: 1023px) {
+  @media (max-width: 767px) {
     .glass-nav,
     .glass-nav-scrolled {
       background: #0a0a0a;
@@ -389,6 +389,9 @@
 
   /* ── Boutons ── */
   .flora-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     background: var(--color-flora-coral);
     color: #ffffff;
@@ -414,6 +417,9 @@
   }
 
   .flora-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.42);
     background: rgba(255, 255, 255, 0.05);

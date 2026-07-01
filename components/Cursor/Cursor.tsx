@@ -47,13 +47,13 @@ function Cursor({ variant = "default" }: CursorProps) {
       if (el && !hovering) {
         hovering = true;
         gsap.to(ring, {
-          scale: 1.18,
-          borderColor: "rgba(224, 122, 95, 0.7)",
-          duration: 0.55,
+          scale: 1.04,
+          borderColor: "rgba(224, 122, 95, 0.6)",
+          duration: 0.35,
           ease: "sine.out",
         });
-        gsap.to(dot, { scale: 0.6, opacity: 0.85, duration: 0.45, ease: "sine.out" });
-        gsap.to(halo, { opacity: 0.65, scale: 1.15, duration: 0.55, ease: "sine.out" });
+        gsap.to(dot, { scale: 0.85, opacity: 0.9, duration: 0.3, ease: "sine.out" });
+        gsap.to(halo, { opacity: 0.5, scale: 1.04, duration: 0.35, ease: "sine.out" });
       }
     };
 

@@ -43,6 +43,16 @@ function Navbar() {
     };
   }, [mobileOpen]);
 
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const onChange = () => {
+      if (mq.matches) setMobileNavOpen(false);
+    };
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [setMobileNavOpen]);
+
   const handleMobileNavClick = () => {
     navigateFromMobile();
   };
@@ -51,11 +61,11 @@ function Navbar() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-10 md:py-5 lg:px-14",
+          "fixed top-0 left-0 right-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center px-6 py-4 md:px-10 md:py-5 lg:px-14",
           mobileOpen ? "nav-solid" : scrolled ? "glass-nav-scrolled" : "glass-nav"
         )}
       >
-        <Link href="/" className="group flex items-center gap-3" data-cursor="hover">
+        <Link href="/" className="group flex items-center gap-3 justify-self-start" data-cursor="hover">
           <Image
             src="/logo.svg"
             alt="FLORA"
@@ -67,7 +77,7 @@ function Navbar() {
           <span className="flora-title text-lg tracking-[0.2em] md:text-xl">FLORA</span>
         </Link>
 
-        <nav className="hidden items-center gap-10 lg:flex">
+        <nav className="hidden items-center gap-8 md:flex lg:gap-10 justify-self-center">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -83,7 +93,7 @@ function Navbar() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-4 md:gap-5">
+        <div className="flex items-center justify-self-end gap-3 sm:gap-4 md:gap-5">
           <button aria-label="Rechercher" data-cursor="hover" className="nav-action-btn hidden sm:flex">
             <Search size={20} strokeWidth={1.75} />
           </button>
@@ -114,7 +124,7 @@ function Navbar() {
           <button
             aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
             data-cursor="hover"
-            className="nav-action-btn lg:hidden"
+            className="nav-action-btn md:hidden"
             onClick={toggleMobileNav}
           >
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
@@ -123,7 +133,7 @@ function Navbar() {
       </header>
 
       {mobileOpen && (
-        <div className="mobile-nav-panel fixed inset-0 z-[45] lg:hidden">
+        <div className="mobile-nav-panel fixed inset-0 z-[45] md:hidden">
           <nav className="flex h-full flex-col px-6 pt-28 pb-10 sm:px-8">
             <p className="flora-muted mb-6 font-poppins text-[10px] tracking-[0.3em] uppercase">
               Menu

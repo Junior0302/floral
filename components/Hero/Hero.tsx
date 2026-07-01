@@ -36,8 +36,8 @@ export default function Hero() {
     if (buttonsRef.current) {
       tl.fromTo(
         buttonsRef.current.children,
-        { opacity: 0, scale: 0.96 },
-        { opacity: 1, scale: 1, duration: 0.6, stagger: 0.08, ease: "power3.out" },
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.06, ease: "power2.out" },
         0.55
       );
     }
@@ -71,18 +71,21 @@ export default function Hero() {
           La beauté naturelle, livrée avec soin.
         </p>
 
-        <div ref={buttonsRef} className="mt-10 flex w-full max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:gap-4">
+        <div
+          ref={buttonsRef}
+          className="mt-10 flex w-full max-w-md flex-col items-center justify-center gap-3 sm:max-w-none sm:flex-row sm:gap-4"
+        >
           <Link
             href="/boutique"
             data-cursor="hover"
-            className="flora-btn-primary w-full px-8 py-3.5 text-center font-poppins text-xs tracking-[0.15em] uppercase sm:w-auto"
+            className="flora-btn-primary inline-flex w-full items-center justify-center px-8 py-3.5 text-center font-poppins text-xs tracking-[0.12em] uppercase sm:w-auto"
           >
             Découvrir la collection
           </Link>
           <Link
             href="/boutique"
             data-cursor="hover"
-            className="flora-btn-ghost w-full px-8 py-3.5 text-center font-poppins text-xs tracking-[0.15em] uppercase sm:w-auto"
+            className="flora-btn-ghost inline-flex w-full items-center justify-center px-8 py-3.5 text-center font-poppins text-xs tracking-[0.12em] uppercase sm:w-auto"
           >
             Commander maintenant
           </Link>

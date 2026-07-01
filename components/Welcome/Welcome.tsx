@@ -35,8 +35,8 @@ export default function Welcome({ onComplete }: WelcomeProps) {
     if (!contentRef.current) return;
     gsap.fromTo(
       contentRef.current,
-      { opacity: 0, y: 20, scale: 0.97 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "power3.out", delay: 0.2 }
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", delay: 0.2 }
     );
   }, []);
 
