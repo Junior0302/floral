@@ -12,17 +12,23 @@ interface WelcomeProps {
 export default function Welcome({ onComplete }: WelcomeProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
   const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    const video = document.createElement("video");
-    video.src = "/floral.mp4";
-    video.preload = "auto";
-    video.oncanplaythrough = () => setReady(true);
-    video.load();
-    const fallback = setTimeout(() => setReady(true), 2500);
-    return () => clearTimeout(fallback);
+    const video = videoRef.current;
+    if (!video) return;
+
+    const onReady = () => setReady(true);
+    video.addEventListener("canplaythrough", onReady, { once: true });
+    video.play().catch(() => {});
+
+    const fallback = setTimeout(() => setReady(true), 2000);
+    return () => {
+      clearTimeout(fallback);
+      video.removeEventListener("canplaythrough", onReady);
+    };
   }, []);
 
   useEffect(() => {
@@ -30,7 +36,7 @@ export default function Welcome({ onComplete }: WelcomeProps) {
     gsap.fromTo(
       contentRef.current,
       { opacity: 0, y: 20, scale: 0.97 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "power3.out", delay: 0.15 }
+      { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "power3.out", delay: 0.2 }
     );
   }, []);
 
@@ -43,10 +49,10 @@ export default function Welcome({ onComplete }: WelcomeProps) {
 
     const tl = gsap.timeline({ onComplete });
     if (contentRef.current) {
-      tl.to(contentRef.current, { opacity: 0, y: -12, duration: 0.35, ease: "power2.in" });
+      tl.to(contentRef.current, { opacity: 0, y: -12, duration: 0.32, ease: "power2.in" });
     }
     if (overlayRef.current) {
-      tl.to(overlayRef.current, { opacity: 0, duration: 0.45, ease: "power2.inOut" }, 0.1);
+      tl.to(overlayRef.current, { opacity: 0, duration: 0.42, ease: "power2.inOut" }, 0.08);
     }
   };
 
@@ -55,11 +61,26 @@ export default function Welcome({ onComplete }: WelcomeProps) {
       ref={overlayRef}
       className="welcome-screen fixed inset-0 z-[10000] flex items-center justify-center overflow-hidden"
     >
-      <div ref={contentRef} className="welcome-card relative z-10 mx-6 flex max-w-md flex-col items-center px-10 py-14 text-center md:px-14 md:py-16">
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="welcome-video absolute inset-0 h-full w-full object-cover"
+        aria-hidden
+      >
+        <source src="/floral.mp4" type="video/mp4" />
+      </video>
+      <div className="welcome-overlay absolute inset-0" aria-hidden />
+
+      <div
+        ref={contentRef}
+        className="welcome-card relative z-10 mx-6 flex max-w-md flex-col items-center px-10 py-14 text-center md:px-14 md:py-16"
+      >
         <Image src="/logo.svg" alt="" width={52} height={52} className="mb-7" priority />
-        <h1 className="flora-title text-5xl tracking-[0.08em] md:text-6xl">
-          FLORA
-        </h1>
+        <h1 className="flora-title text-5xl tracking-[0.08em] md:text-6xl">FLORA</h1>
         <p className="flora-accent flora-muted mt-4 text-base tracking-[0.2em] uppercase md:text-lg">
           Luxury Floral Experience
         </p>

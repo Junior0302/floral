@@ -16,7 +16,6 @@ export default function PageTransition({ children }: PageTransitionProps) {
   const childrenRef = useRef(children);
   const prevPath = useRef(pathname);
   const isFirstRender = useRef(true);
-  const loaderStartedAt = useRef(0);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const transitionIdRef = useRef(0);
   const [displayChildren, setDisplayChildren] = useState(children);
@@ -24,35 +23,26 @@ export default function PageTransition({ children }: PageTransitionProps) {
 
   childrenRef.current = children;
 
-  const scheduleHideLoader = (transitionId: number, onDone: () => void) => {
-    const elapsed = Date.now() - loaderStartedAt.current;
-    const remaining = Math.max(0, LOADER_DURATION_MS - elapsed);
-
-    if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
-    hideTimerRef.current = setTimeout(() => {
-      if (transitionIdRef.current !== transitionId) return;
-      setLoading(false);
-      hideTimerRef.current = null;
-      onDone();
-    }, remaining);
-  };
-
   useEffect(() => {
     return () => {
       if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
     };
   }, []);
 
+  /* Sync contenu sans relancer la transition */
   useEffect(() => {
-    if (pathname === prevPath.current) {
+    if (pathname === prevPath.current && !loading) {
       setDisplayChildren(children);
-      return;
     }
+  }, [children, pathname, loading]);
+
+  useEffect(() => {
+    if (pathname === prevPath.current) return;
 
     if (isFirstRender.current) {
       isFirstRender.current = false;
       prevPath.current = pathname;
-      setDisplayChildren(children);
+      setDisplayChildren(childrenRef.current);
       return;
     }
 
@@ -60,29 +50,32 @@ export default function PageTransition({ children }: PageTransitionProps) {
     const transitionId = ++transitionIdRef.current;
 
     if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
-    gsap.killTweensOf(el);
+    if (el) gsap.killTweensOf(el);
 
-    loaderStartedAt.current = Date.now();
     setLoading(true);
-
-    if (el) gsap.set(el, { opacity: 0, scale: 0.98 });
+    if (el) gsap.set(el, { opacity: 0, scale: 0.985 });
 
     prevPath.current = pathname;
     setDisplayChildren(childrenRef.current);
-
-    const revealContent = () => {
-      if (transitionIdRef.current !== transitionId || !contentRef.current) return;
-      gsap.to(contentRef.current, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.42,
-        ease: "power3.out",
-      });
-    };
-
-    scheduleHideLoader(transitionId, revealContent);
     window.scrollTo(0, 0);
-  }, [pathname, children]);
+
+    hideTimerRef.current = setTimeout(() => {
+      if (transitionIdRef.current !== transitionId) return;
+
+      setLoading(false);
+
+      if (contentRef.current) {
+        gsap.to(contentRef.current, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.38,
+          ease: "power3.out",
+        });
+      }
+
+      hideTimerRef.current = null;
+    }, LOADER_DURATION_MS);
+  }, [pathname]);
 
   return (
     <>
