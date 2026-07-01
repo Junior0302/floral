@@ -62,8 +62,8 @@ export default function PageTransition({ children }: PageTransitionProps) {
       if (contentRef.current) {
         gsap.to(contentRef.current, {
           opacity: 1,
-          duration: 0.32,
-          ease: "power2.out",
+          duration: 0.55,
+          ease: "power2.inOut",
         });
       }
 

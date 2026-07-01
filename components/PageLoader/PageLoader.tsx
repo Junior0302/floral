@@ -29,20 +29,20 @@ function PageLoader({ active }: PageLoaderProps) {
       if (logoWrap) {
         gsap.fromTo(
           logoWrap,
-          { scale: 0.88, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.28, ease: "back.out(1.5)" }
+          { opacity: 0, y: 6 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
         );
       }
 
       if (ring) {
         gsap.fromTo(
           ring,
-          { scale: 0.75, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.35, ease: "power2.out" }
+          { opacity: 0 },
+          { opacity: 1, duration: 0.45, ease: "power2.out" }
         );
         gsap.to(ring, {
           rotation: 360,
-          duration: 0.9,
+          duration: 1.6,
           ease: "none",
           repeat: -1,
         });
@@ -55,7 +55,7 @@ function PageLoader({ active }: PageLoaderProps) {
           {
             scaleX: 1,
             duration: LOADER_DURATION_MS / 1000,
-            ease: "power2.inOut",
+            ease: "power1.inOut",
           }
         );
       }
@@ -64,7 +64,7 @@ function PageLoader({ active }: PageLoaderProps) {
       gsap.to(root, {
         opacity: 0,
         duration: LOADER_FADE_OUT_MS / 1000,
-        ease: "power2.inOut",
+        ease: "power1.inOut",
         onComplete: () => {
           gsap.set(root, { display: "none", pointerEvents: "none", opacity: 1 });
           if (bar) gsap.set(bar, { scaleX: 0 });
