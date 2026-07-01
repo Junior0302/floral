@@ -19,6 +19,7 @@ const navLinks = [
 function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const mobileOpen = useUiStore((s) => s.mobileNavOpen);
   const pageLoading = useUiStore((s) => s.pageLoading);
   const toggleMobileNav = useUiStore((s) => s.toggleMobileNav);
@@ -46,7 +47,9 @@ function Navbar() {
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     const onChange = () => {
-      if (mq.matches) setMobileNavOpen(false);
+      const desktop = mq.matches;
+      setIsDesktop(desktop);
+      if (desktop) setMobileNavOpen(false);
     };
     onChange();
     mq.addEventListener("change", onChange);
@@ -94,13 +97,13 @@ function Navbar() {
         </nav>
 
         <div className="flex items-center justify-self-end gap-3 sm:gap-4 md:gap-5">
-          <button aria-label="Rechercher" data-cursor="hover" className="nav-action-btn hidden sm:flex">
+          <button aria-label="Rechercher" data-cursor="hover" className="nav-action-btn hidden sm:inline-flex">
             <Search size={20} strokeWidth={1.75} />
           </button>
-          <button aria-label="Compte" data-cursor="hover" className="nav-action-btn hidden sm:flex">
+          <button aria-label="Compte" data-cursor="hover" className="nav-action-btn hidden sm:inline-flex">
             <User size={20} strokeWidth={1.75} />
           </button>
-          <button aria-label="Favoris" data-cursor="hover" className="nav-action-btn relative">
+          <button aria-label="Favoris" data-cursor="hover" className="nav-action-btn relative inline-flex">
             <Heart size={20} strokeWidth={1.75} />
             {favCount > 0 && (
               <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-flora-coral text-[10px] font-semibold text-white">
@@ -112,7 +115,7 @@ function Navbar() {
             aria-label="Panier"
             data-cursor="hover"
             onClick={() => setCartOpen(true)}
-            className="nav-action-btn relative"
+            className="nav-action-btn relative inline-flex"
           >
             <ShoppingBag size={20} strokeWidth={1.75} />
             {cartCount > 0 && (
@@ -121,19 +124,21 @@ function Navbar() {
               </span>
             )}
           </button>
-          <button
-            aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
-            data-cursor="hover"
-            className="nav-action-btn md:hidden"
-            onClick={toggleMobileNav}
-          >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {!isDesktop && (
+            <button
+              aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              data-cursor="hover"
+              className="nav-action-btn inline-flex"
+              onClick={toggleMobileNav}
+            >
+              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          )}
         </div>
       </header>
 
-      {mobileOpen && (
-        <div className="mobile-nav-panel fixed inset-0 z-[45] md:hidden">
+      {mobileOpen && !isDesktop && (
+        <div className="mobile-nav-panel fixed inset-0 z-[45]">
           <nav className="flex h-full flex-col px-6 pt-28 pb-10 sm:px-8">
             <p className="flora-muted mb-6 font-poppins text-[10px] tracking-[0.3em] uppercase">
               Menu

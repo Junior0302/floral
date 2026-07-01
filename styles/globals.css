@@ -198,7 +198,6 @@
   }
 
   .nav-action-btn {
-    display: flex;
     align-items: center;
     justify-content: center;
     height: 2.25rem;
