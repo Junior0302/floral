@@ -61,7 +61,7 @@ export default function AboutPage() {
         <AnimatedTitle
           text="À propos"
           as="h1"
-          className="flora-title text-6xl font-light md:text-7xl lg:text-[5.5rem]"
+          className="flora-title text-6xl md:text-7xl lg:text-[5.5rem]"
         />
       </section>
 
@@ -80,7 +80,7 @@ export default function AboutPage() {
         </div>
 
         <div ref={quoteRef} className="mx-auto mt-28 max-w-xl text-center">
-          <p className="flora-title font-playfair text-2xl font-light leading-relaxed md:text-4xl">
+          <p className="flora-title text-2xl leading-relaxed md:text-4xl">
             Nous croyons que chaque bouquet raconte une histoire.
           </p>
           <p className="flora-body mt-8 font-poppins text-base leading-relaxed md:text-lg">
@@ -92,7 +92,7 @@ export default function AboutPage() {
       </section>
 
       <section className="section-spacious px-6 md:px-12 lg:px-16">
-        <h2 className="flora-title mb-20 text-center font-playfair text-3xl font-light md:text-4xl">
+        <h2 className="flora-section-title flora-title mb-20 text-center md:text-4xl">
           Notre histoire
         </h2>
         <div className="mx-auto max-w-2xl">
@@ -103,7 +103,7 @@ export default function AboutPage() {
       </section>
 
       <section className="section-spacious px-6 md:px-12 lg:px-16">
-        <h2 className="flora-title mb-16 text-center font-playfair text-3xl font-light md:text-4xl">
+        <h2 className="flora-section-title flora-title mb-16 text-center md:text-4xl">
           Nos valeurs
         </h2>
         <div className="mx-auto grid max-w-4xl gap-12 md:grid-cols-3">
@@ -115,7 +115,7 @@ export default function AboutPage() {
 
       <section className="section-spacious px-6 pb-8 md:px-12 lg:px-16">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="flora-title font-playfair text-3xl font-light md:text-4xl">
+          <h2 className="flora-section-title flora-title md:text-4xl">
             Notre atelier
           </h2>
           <p className="flora-body mt-8 font-poppins text-base leading-relaxed md:text-lg">
@@ -165,7 +165,7 @@ function TimelineItem({
         <span className="font-poppins text-[10px] tracking-[0.2em] text-flora-coral">
           {item.year}
         </span>
-        <h3 className="flora-title mt-2 font-playfair text-xl md:text-2xl">{item.title}</h3>
+        <h3 className="flora-title mt-2 text-xl md:text-2xl">{item.title}</h3>
         <p className="flora-body mt-3 font-poppins text-base">{item.desc}</p>
       </div>
     </div>
@@ -199,7 +199,7 @@ function ValueCard({
 
   return (
     <div ref={ref} className="text-center">
-      <h3 className="flora-title font-playfair text-xl md:text-2xl">{value.title}</h3>
+      <h3 className="flora-title text-xl md:text-2xl">{value.title}</h3>
       <p className="flora-body mt-4 font-poppins text-base leading-relaxed">
         {value.desc}
       </p>

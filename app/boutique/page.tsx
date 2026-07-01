@@ -74,9 +74,9 @@ export default function BoutiquePage() {
         <AnimatedTitle
           text="Boutique"
           as="h1"
-          className="flora-title text-6xl font-light md:text-7xl lg:text-[5.5rem]"
+          className="flora-title text-6xl md:text-7xl lg:text-[5.5rem]"
         />
-        <p className="flora-body mt-6 max-w-lg font-poppins text-base leading-relaxed md:text-lg">
+        <p className="flora-lead flora-body mt-6 max-w-lg leading-relaxed">
           Découvrez nos créations florales, composées avec passion et livrées avec soin.
         </p>
       </section>

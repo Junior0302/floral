@@ -43,7 +43,7 @@ export default function AnimatedTitle({
   return (
     <Tag
       ref={ref}
-      className={cn("font-playfair", className)}
+      className={cn("font-gentle", className)}
     />
   );
 }

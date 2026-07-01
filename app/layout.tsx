@@ -1,12 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Poppins } from "next/font/google";
+import { Poppins } from "next/font/google";
+import localFont from "next/font/local";
 import Providers from "@/components/Providers";
 import "@/styles/globals.css";
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
+const gentleHearts = localFont({
+  src: "../styles/font/GentleHearts-Regular.ttf",
+  variable: "--font-gentle-hearts",
   display: "swap",
+  fallback: ["Playfair Display", "Georgia", "serif"],
 });
 
 const poppins = Poppins({
@@ -64,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${playfair.variable} ${poppins.variable}`}>
+    <html lang="fr" className={`${gentleHearts.variable} ${poppins.variable}`}>
       <head>
         <link rel="preload" href="/floral.mp4" as="video" type="video/mp4" />
       </head>

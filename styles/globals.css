@@ -10,7 +10,7 @@
   --color-flora-beige: #d4c5b9;
   --color-flora-white: #ffffff;
 
-  --font-playfair: "Playfair Display", serif;
+  --font-gentle: var(--font-gentle-hearts), "Playfair Display", Georgia, serif;
   --font-poppins: "Poppins", sans-serif;
 
   --flora-overlay: rgba(0, 0, 0, 0.4);
@@ -76,8 +76,9 @@
     outline-offset: 3px;
   }
 
+  .font-gentle,
   .font-playfair {
-    font-family: var(--font-playfair), serif;
+    font-family: var(--font-gentle);
   }
 
   .font-poppins {
@@ -98,8 +99,14 @@
 
   /* ── Typographie ── */
   .flora-title {
+    font-family: var(--font-gentle);
     color: #ffffff;
     text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.45);
+  }
+
+  .flora-accent {
+    font-family: var(--font-gentle);
+    letter-spacing: 0.05em;
   }
 
   .flora-body {
@@ -113,23 +120,25 @@
   }
 
   .flora-h1 {
-    font-family: var(--font-playfair), serif;
-    font-weight: 300;
+    font-family: var(--font-gentle);
+    font-weight: 400;
     font-size: clamp(2.75rem, 6vw, 5.5rem);
-    line-height: 1.05;
+    line-height: 1.1;
   }
 
   .flora-lead {
-    font-size: clamp(1rem, 1.5vw, 1.125rem);
-    line-height: 1.7;
+    font-family: var(--font-gentle);
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    line-height: 1.65;
     max-width: 36rem;
+    letter-spacing: 0.03em;
   }
 
   .flora-section-title {
-    font-family: var(--font-playfair), serif;
-    font-weight: 300;
+    font-family: var(--font-gentle);
+    font-weight: 400;
     font-size: clamp(1.75rem, 3vw, 2.25rem);
-    line-height: 1.2;
+    line-height: 1.15;
   }
 
   /* ── Layout pages (aligné About) ── */

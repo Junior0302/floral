@@ -52,7 +52,7 @@ export default function Hero() {
 
         <AnimatedTitle
           text="FLORA"
-          className="flora-title text-6xl font-light tracking-[0.15em] md:text-8xl lg:text-9xl"
+          className="flora-title text-6xl tracking-[0.06em] md:text-8xl lg:text-9xl"
           delay={0.15}
         />
 
@@ -66,7 +66,7 @@ export default function Hero() {
 
         <p
           ref={subtitleRef}
-          className="flora-body max-w-md font-poppins text-base font-light tracking-wide md:text-lg"
+          className="flora-accent flora-body max-w-md text-lg tracking-wide md:text-xl"
         >
           La beauté naturelle, livrée avec soin.
         </p>

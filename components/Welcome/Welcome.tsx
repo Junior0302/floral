@@ -57,10 +57,10 @@ export default function Welcome({ onComplete }: WelcomeProps) {
     >
       <div ref={contentRef} className="welcome-card relative z-10 mx-6 flex max-w-md flex-col items-center px-10 py-14 text-center md:px-14 md:py-16">
         <Image src="/logo.svg" alt="" width={52} height={52} className="mb-7" priority />
-        <h1 className="flora-title font-playfair text-5xl font-light tracking-[0.25em] md:text-6xl">
+        <h1 className="flora-title text-5xl tracking-[0.08em] md:text-6xl">
           FLORA
         </h1>
-        <p className="flora-muted mt-4 font-poppins text-sm tracking-[0.35em] uppercase md:text-base">
+        <p className="flora-accent flora-muted mt-4 text-base tracking-[0.2em] uppercase md:text-lg">
           Luxury Floral Experience
         </p>
 
